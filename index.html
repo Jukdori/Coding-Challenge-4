@@ -1,29 +1,232 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Page Title - Entry 1</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matcha House</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: #f5f2eb;
+            font-family: 'Jost', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* @keyframes + animation */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes steamRise {
+            0%   { transform: translateY(0) scaleX(1); opacity: 0.6; }
+            50%  { transform: translateY(-20px) scaleX(1.3); opacity: 0.3; }
+            100% { transform: translateY(-40px) scaleX(0.8); opacity: 0; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50%       { transform: translateY(-8px); }
+        }
+
+        header {
+            text-align: center;
+            padding: 80px 20px 40px;
+            animation: fadeUp 1.2s ease forwards;
+        }
+
+        header h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 4rem;
+            font-weight: 300;
+            color: #2d4a2d;
+            letter-spacing: 0.15em;
+        }
+
+        header p {
+            font-size: 0.75rem;
+            letter-spacing: 0.4em;
+            color: #7a8c6e;
+            margin-top: 10px;
+            text-transform: uppercase;
+        }
+
+        .steam-container {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            height: 50px;
+            margin: 10px auto;
+        }
+
+        .steam {
+            width: 4px;
+            background: linear-gradient(to top, #a8c49a, transparent);
+            border-radius: 4px;
+            animation: steamRise 2.5s ease-in-out infinite;
+        }
+        .steam:nth-child(2) { animation-delay: 0.4s; height: 30px; }
+        .steam:nth-child(3) { animation-delay: 0.8s; height: 40px; }
+
+        .menu {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 24px;
+        }
+
+        /* transform + filter + mix-blend-mode */
+        .card {
+            background: white;
+            border-radius: 2px;
+            padding: 36px 28px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeUp 1s ease forwards;
+            animation-delay: var(--delay, 0s);
+            opacity: 0;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-6px) scale(1.01);
+            box-shadow: 0 20px 40px rgba(45, 74, 45, 0.12);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -40px; right: -40px;
+            width: 130px; height: 130px;
+            border-radius: 50%;
+            background: var(--accent, #c8dbc0);
+            mix-blend-mode: multiply;
+            transition: transform 0.4s ease;
+        }
+
+        .card:hover::before {
+            transform: scale(1.3);
+        }
+
+        .card-icon {
+            font-size: 2.2rem;
+            display: block;
+            margin-bottom: 16px;
+            animation: float 3s ease-in-out infinite;
+            animation-delay: var(--delay, 0s);
+            filter: drop-shadow(0 4px 8px rgba(45,74,45,0.2));
+        }
+
+        .card h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: #2d4a2d;
+            margin-bottom: 8px;
+        }
+
+        .card p {
+            font-size: 0.78rem;
+            color: #8a9980;
+            line-height: 1.7;
+            letter-spacing: 0.02em;
+            margin-bottom: 20px;
+        }
+
+        .price {
+            font-size: 0.85rem;
+            letter-spacing: 0.2em;
+            color: #4a6741;
+        }
+
+        .card:nth-child(1) { --accent: #c8dbc0; --delay: 0.1s; }
+        .card:nth-child(2) { --accent: #d4c9b0; --delay: 0.2s; }
+        .card:nth-child(3) { --accent: #b8cfc8; --delay: 0.3s; }
+        .card:nth-child(4) { --accent: #d8c8c0; --delay: 0.4s; }
+        .card:nth-child(5) { --accent: #c4d4b8; --delay: 0.5s; }
+        .card:nth-child(6) { --accent: #ccc0d4; --delay: 0.6s; }
+
+        footer {
+            text-align: center;
+            padding: 60px 20px;
+            font-size: 0.7rem;
+            letter-spacing: 0.3em;
+            color: #aab89e;
+            text-transform: uppercase;
+            filter: opacity(0.8);
+        }
+
+        /* @media print */
+        @media print {
+            body { background: white; }
+            .card { box-shadow: none; border: 1px solid #ddd; }
+            .card::before { display: none; }
+            .steam-container { display: none; }
+            * { animation: none !important; }
+            header h1 { color: black; }
+        }
+    </style>
+</head>
+<body>
+
     <header>
-      <h1>Coding Challenge 4</h1>
+        <div class="steam-container">
+            <div class="steam"></div>
+            <div class="steam"></div>
+            <div class="steam"></div>
+        </div>
+        <h1>Matcha House</h1>
+        <p>Ceremonial grade · Small batch · Seasonal</p>
     </header>
 
-    <main>
-      <section>
-        <h2>Css to try</h2>
-        <p>
-          <strong>Merge a branch</strong>,Create a repository
-        </p>
-        <p>
-         Add a peer from your study group as a collaborator
-        </p>
-        <p>
-          Take turns making 10 commits 
-        </p>
-      </section>
-    </main>
-  </body>
+    <div class="menu">
+        <div class="card">
+            <span class="card-icon">🍵</span>
+            <h2>Classic Matcha Latte</h2>
+            <p>Ceremonial grade matcha whisked with oat milk, lightly sweetened with honey.</p>
+            <span class="price">$6.50</span>
+        </div>
+        <div class="card">
+            <span class="card-icon">🧊</span>
+            <h2>Iced Matcha Latte</h2>
+            <p>Cold-poured over ice with your choice of milk. Crisp, clean, refreshing.</p>
+            <span class="price">$7.00</span>
+        </div>
+        <div class="card">
+            <span class="card-icon">🌸</span>
+            <h2>Rose Matcha</h2>
+            <p>Matcha blended with rose water and steamed oat milk. Floral and delicate.</p>
+            <span class="price">$7.50</span>
+        </div>
+        <div class="card">
+            <span class="card-icon">🍫</span>
+            <h2>Matcha Mocha</h2>
+            <p>A layered blend of ceremonial matcha and dark chocolate with steamed milk.</p>
+            <span class="price">$7.50</span>
+        </div>
+        <div class="card">
+            <span class="card-icon">🥥</span>
+            <h2>Coconut Matcha</h2>
+            <p>Matcha with coconut milk and a pinch of sea salt. Creamy and tropical.</p>
+            <span class="price">$7.00</span>
+        </div>
+        <div class="card">
+            <span class="card-icon">✨</span>
+            <h2>Ceremonial Thin</h2>
+            <p>Traditional usucha — just matcha and water, whisked to a fine froth.</p>
+            <span class="price">$5.50</span>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2026 Matcha House — All drinks made to order
+    </footer>
+
+</body>
 </html>
